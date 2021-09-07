@@ -1,0 +1,132 @@
+
+<html lang="en">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Hospital Data</h2>
+            <form id="empForm" method="post">
+                <div class="form-group">
+                    <span><label for="HospitalId">Hospital Name:</label> <label id="HospitalIdMsg">
+                        </label></span>
+                    <input type="text" class="form-control" name="HospitalId" id="HospitalId"
+                           placeholder="Enter Hospital Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="BedsAvailable">No Of Beds Available:</label>
+                    <input type="text" class="form-control" id="BedsAvailable"
+                           placeholder="Enter No Of Beds Available" name="BedsAvailable">
+                </div>
+                <div class="form-group">
+                    <label for="ContactNo">Contact No:</label>
+                    <input type="text" class="form-control" id="ContactNo"
+                           placeholder="Enter Contact No" name="ContactNo">
+                </div>
+               <div class="form-group">
+                    <label for="Address">Address:</label>
+                    <input type="text" class="form-control" id="Address"
+                           placeholder="Enter Address" name="Address">
+                </div>
+                <input type="button" class="btn btn-primary" id="empSave" value="Save"
+                       onclick="saveData();">
+            </form>
+        </div>
+        <script>
+            function validateAndGetFormData() {
+                var HospitalIdVar = $("#HospitalId").val();
+                if (HospitalIdVar === "") {
+                    alert("Hospital Name Required Value");
+                    $("#HospitalId").focus();
+                    return "";
+                }
+                var BedsAvailableVar = $("#BedsAvailable").val();
+                if (BedsAvailableVar === "") {
+                    alert("No of beds is Required Value");
+                    $("#BedsAvailable").focus();
+                    return "";
+                }
+                var ContactNoVar = $("#ContactNo").val();
+                if (ContactNoVar === "") {
+                    alert("Contact no is Required Value");
+                    $("#ContactNo").focus();
+                    return "";
+                }
+                 var AddressVar = $("#Address").val();
+                if (AddressVar === "") {
+                    alert("Address is Required Value");
+                    $("#Address").focus();
+                    return "";
+                }
+                var jsonStrObj = {
+                    HospitalName: HospitalIdVar,
+                    NoOfBedsAvailable: BedsAvailableVar,
+                    MobileNo: ContactNoVar,
+                    Address: AddressVar,
+                };
+                return JSON.stringify(jsonStrObj);
+            }
+            function createPUTRequest(connToken, jsonObj, dbName, relName) {
+                var putRequest = "{\n"
+                        + "\"token\" : \""
+                        + connToken
+                        + "\","
+                        + "\"dbName\": \""
+                        + dbName
+                        + "\",\n" + "\"cmd\" : \"PUT\",\n"
+                        + "\"rel\" : \""
+                        + relName + "\","
+                        + "\"jsonStr\": \n"
+                        + jsonObj
+                        + "\n"
+                        + "}";
+                return putRequest;
+            }
+            function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+                var url = dbBaseUrl + apiEndPointUrl;
+                var jsonObj;
+                $.post(url, reqString, function (result) {
+                    jsonObj = JSON.parse(result);
+                }).fail(function (result) {
+                    var dataJsonObj = result.responseText;
+                    jsonObj = JSON.parse(dataJsonObj);
+                });
+                return jsonObj;
+            }
+            function resetForm() {
+                $("#HospitalId").val("")
+                $("#BedsAvailable").val("");
+                $("#ContactNo").val("");
+                $("#Address").val("");
+                $("#HospitalId").focus();
+            }
+
+
+            function saveData() {
+                var jsonStr = validateAndGetFormData();
+                if (jsonStr === "") {
+                    return;
+                }
+                var putReqStr = createPUTRequest("90936177|-31948848830950642|90943919",
+                        jsonStr, "Hospital", "Hospital-Data");
+                alert(putReqStr);
+                jQuery.ajaxSetup({async: false});
+               var resultObj = executeCommand(putReqStr,
+                   "http://api.login2explore.com:5577", "/api/iml");
+                alert(JSON.stringify(resultObj));
+                jQuery.ajaxSetup({async: true});
+                resetForm();
+            }
+
+        </script>
+
+    </body>
+</html>

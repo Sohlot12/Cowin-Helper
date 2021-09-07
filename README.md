@@ -21,5 +21,6 @@ Contents |
 **How the webpage look:**
 ![Screenshot (655)](https://user-images.githubusercontent.com/90273207/132409829-2f5407b6-e7a5-4bc9-8466-3de0138b99ba.png)
 **How the data stored in JsonPowerDB:**
-![Screenshot (659)](https://user-images.githubusercontent.com/90273207/132410813-7c7f231c-0e65-48da-a356-70755c4ce013.png)
+![Screenshot (661)](https://user-images.githubusercontent.com/90273207/132411511-32eba11f-d758-4a44-a1cb-2085cf1e0f61.png)
+
 
